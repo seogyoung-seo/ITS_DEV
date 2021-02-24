@@ -1,5 +1,9 @@
 connection: "its_dev"
 
+# SQL Table 사용 시
+# EGENE54_SEAH.[Table Name]
+# 형식처럼 Table Name앞에 [EGENE54_SEAH.]을 붙여야합니다.
+
 include: "*.view"
 
 datagroup: vntg_its_dev_default_datagroup {
