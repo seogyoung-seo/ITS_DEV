@@ -13,4 +13,13 @@ datagroup: vntg_its_dev_default_datagroup {
 
 persist_with: vntg_its_dev_default_datagroup
 
-explore: test_seo {}
+explore: test_seo {
+  conditionally_filter: {
+    filters: {
+      field: "emp_id"
+      value: "looker"
+    }
+
+    unless: [emp_id, emp_no]
+  }
+}

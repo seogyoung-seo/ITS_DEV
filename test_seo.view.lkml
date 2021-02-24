@@ -1,15 +1,29 @@
 view: test_seo {
   # You can specify the table name if it's different from the view name:
-  sql_table_name: EGENE54_SEAH.EBD_BBS ;;
+  sql_table_name: EGENE54_SEAH.ECF_EMPLOYEE ;;
 
   # Define your dimensions and measures here, like this:
-  dimension: ebs_id {
+  dimension:emp_id {
     description: "Unique ID for each user that has ordered"
     primary_key: yes
     type: string
-    sql: ${TABLE}.EBS_ID ;;
+    sql: ${TABLE}.emp_id ;;
   }
 
+  dimension: emp_used {
+    type: string
+    sql: ${TABLE}.emp_used ;;
+  }
+
+  dimension: emp_no {
+    type: string
+    sql: ${TABLE}.emp_no ;;
+  }
+
+  dimension: emp_type {
+    type: string
+    sql: ${TABLE}.emp_type ;;
+  }
   # dimension: lifetime_orders {
   #   description: "The total number of orders for each user"
   #   type: number
