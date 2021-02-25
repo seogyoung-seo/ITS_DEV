@@ -1,6 +1,6 @@
 view: test_seo {
   # You can specify the table name if it's different from the view name:
-  sql_table_name: EGENE54_SEAH.ECF_EMPLOYEE ;;
+  sql_table_name: EGENE54_SEAH.ESO_SRM ;;
 
   # Define your dimensions and measures here, like this:
   dimension:emp_id {
