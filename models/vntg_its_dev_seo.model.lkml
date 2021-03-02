@@ -1,6 +1,6 @@
 connection: "its_dev"
 
-label: "2)ITS Dev List"
+label: "2)ITS Dev List[Seo]"
 # SQL Table 사용 시
 # EGENE54_SEAH.[Table Name]
 # 형식처럼 Table Name앞에 [EGENE54_SEAH.]을 붙여야합니다.
@@ -14,13 +14,18 @@ datagroup: vntg_its_dev_default_datagroup {
 
 persist_with: vntg_its_dev_default_datagroup
 
-explore: test_seo {
-  conditionally_filter: {
-    filters: {
-      field: "emp_id"
-      value: "looker"
-    }
+explore: eso_srm {
+  label: "서비스요청관리"
 
-    unless: [emp_id, emp_no]
+  always_filter: {
+    filters: {
+      field: emp_filter
+      value: "접수자"
+    }
   }
+  join: employee {
+    relationship: one_to_one
+    sql_on: ${employee.emp_id} = ${eso_srm.emp_id} ;;
+  }
+
 }
