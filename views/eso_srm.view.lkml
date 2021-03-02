@@ -53,14 +53,12 @@ view: eso_srm {
     sql: TO_DATE(${TABLE}.srm_act_dttm, 'YYYY-MM-DD HH24:MI:SS') ;;
   }
 
-  # dimension: srm_act_emp_id {
-  #   label: "처리자"
-  #   type: string
-  #   sql: ${TABLE}.srm_act_emp_id ;;
-  # }
-  # measure: count {
-  #   description: "Use this for counting lifetime orders across many users"
-  #   type: count
-  #   sql: ${ebs_id} ;;
-  # }
+  measure: srm_count {
+    # description: "Use this for counting lifetime orders across many users"
+    label: "미처리건 수"
+    type: sum
+    sql: CASE WHEN ${TABLE}.srm_clo_dttm is NULL THEN 1
+              ELSE 0
+          END ;;
+  }
 }
