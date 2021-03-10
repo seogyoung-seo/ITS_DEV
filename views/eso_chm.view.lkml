@@ -17,4 +17,10 @@ view: eso_chm {
     type: string
     sql: ${TABLE}.chm_src_id ;;
   }
+
+  dimension: chm_acp_dttm {
+    label: "접수일자"
+    type: string
+    sql: TO_DATE(${TABLE}.srm_acp_dttm, 'YYYY-MM-DD HH24:MI:SS') ;;
+  }
 }

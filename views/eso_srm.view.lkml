@@ -6,15 +6,16 @@ view: eso_srm {
   # Define your dimensions and measures here, like this:
   dimension:srm_id {
     label: "접수번호"
-    description: "Unique ID for each user that has ordered"
+    description: "Unique ID for each user that has ordered!"
     primary_key: yes
     type: string
     sql: ${TABLE}.srm_id ;;
   }
 
-  dimension: srm_acp_dttm {
+  dimension_group: srm_acp_dttm {
     label: "접수일시"
-    type: string
+    type: time
+    timeframes: [time, hour, date, week, month, year, hour_of_day, day_of_week, month_num, raw, week_of_year]
     sql: TO_DATE(${TABLE}.srm_acp_dttm, 'YYYY-MM-DD HH24:MI:SS') ;;
   }
 
