@@ -31,27 +31,158 @@ view: eso_srm {
     label: "담당자"
     type: string
     sql: CASE
-          WHEN {% parameter emp_filter %} = '접수자' THEN ${TABLE}.srm_acp_emp_id
-          WHEN {% parameter emp_filter %} = '처리자' THEN ${TABLE}.srm_act_emp_id
+          WHEN {% parameter emp_filter %} = '접수자' THEN EGENE54_SEAH.get_empname(${TABLE}.srm_acp_emp_id)
+          WHEN {% parameter emp_filter %} = '처리자' THEN EGENE54_SEAH.get_empname(${TABLE}.srm_act_emp_id)
         END ;;
   }
 
-  dimension: srm_actstart_dttm {
+  dimension_group: srm_actstart_dttm {
     label: "실제시작일시"
-    type: string
+    type: time
+    timeframes: [time, hour, date, week, month, year, hour_of_day, day_of_week, month_num, raw, week_of_year]
     sql: TO_DATE(${TABLE}.srm_actstart_dttm, 'YYYY-MM-DD HH24:MI:SS') ;;
   }
 
-  dimension: srm_actfinish_dttm {
+  dimension_group: srm_actfinish_dttm {
     label: "실제완료일시"
-    type: string
+    type: time
+    timeframes: [time, hour, date, week, month, year, hour_of_day, day_of_week, month_num, raw, week_of_year]
     sql: TO_DATE(${TABLE}.srm_actfinish_dttm, 'YYYY-MM-DD HH24:MI:SS') ;;
   }
 
-  dimension: srm_act_dttm {
+  dimension_group: srm_act_dttm {
     label: "처리일시"
-    type: string
+    type: time
+    timeframes: [time, hour, date, week, month, year, hour_of_day, day_of_week, month_num, raw, week_of_year]
     sql: TO_DATE(${TABLE}.srm_act_dttm, 'YYYY-MM-DD HH24:MI:SS') ;;
+  }
+
+  dimension: srm_ass_dpt_id {
+    label: "처리자작업그룹(부서)"
+    type: string
+    sql: EGENE54_SEAH.get_dptname(${TABLE}.srm_ass_dpt_id) ;;
+  }
+
+  # dimension: srm_ass_emp_id {
+  #   label: "처리자"
+  #   type: string
+  #   sql: ${TABLE}.srm_ass_emp_id ;;
+  # }
+
+  dimension: srm_ass_org_id {
+    label: "처리자기관"
+    type: string
+    sql: EGENE54_SEAH.get_orgname(${TABLE}.srm_ass_org_id) ;;
+  }
+
+  dimension: srm_ass_wog_id {
+    label: "처리자작업그룹"
+    type: string
+    sql: EGENE54_SEAH.get_wogname(${TABLE}.srm_ass_wog_id) ;;
+  }
+
+  dimension: srm_cat_cd {
+    label: "범주"
+    type: string
+    sql: EGENE54_SEAH.getcode_level3name(${TABLE}.srm_cat_cd) ;;
+  }
+
+  dimension: srm_cla_cd {
+    label: "상세유형"
+    type: string
+    sql: EGENE54_SEAH.get_codename(${TABLE}.srm_cla_cd) ;;
+  }
+
+  dimension: srm_clo_cd {
+    label: "완료코드"
+    type: string
+    sql: EGENE54_SEAH.get_codename(${TABLE}.srm_clo_cd) ;;
+  }
+
+  dimension_group: srm_clo_dttm {
+    label: "종료일시"
+    type: time
+    timeframes: [time, hour, date, week, month, year, hour_of_day, day_of_week, month_num, raw, week_of_year]
+    sql: TO_DATE(${TABLE}.srm_clo_dttm, 'YYYY-MM-DD HH24:MI:SS');;
+  }
+
+  dimension: srm_med_cd {
+    label: "접수매체"
+    type: string
+    sql: EGENE54_SEAH.get_codename(${TABLE}.srm_med_cd) ;;
+  }
+
+  dimension: srm_own_org_id {
+    label: "소유자기관"
+    type: string
+    sql: EGENE54_SEAH.get_orgname(${TABLE}.srm_own_org_id) ;;
+  }
+
+  dimension_group: srm_reg_dttm {
+    label: "등록일시"
+    type: time
+    timeframes: [time, hour, date, week, month, year, hour_of_day, day_of_week, month_num, raw, week_of_year]
+    sql: TO_DATE(${TABLE}.srm_reg_dttm, 'YYYY-MM-DD HH24:MI:SS');;
+  }
+
+  dimension: srm_req_emp_id {
+    label: "요청자"
+    type: string
+    sql: EGENE54_SEAH.get_empname(${TABLE}.srm_req_emp_id) ;;
+  }
+
+  dimension: srm_req_org_id {
+    label: "요청자기관"
+    type: string
+    sql: EGENE54_SEAH.get_orgname(${TABLE}.srm_req_org_id) ;;
+  }
+
+  parameter: sys_filter {
+    # group_label: "Filter"
+    view_label: "Filter"
+    label: "업무시스템상세조회"
+    allowed_value: { value: "Y" }
+    allowed_value: { value: "N" }
+  }
+
+  dimension: srm_sys_id {
+    label: "업무시스템"
+    type: string
+    sql: CASE
+          WHEN {% parameter sys_filter %} = 'N' THEN EGENE54_SEAH.getlevel2_sysname(${TABLE}.srm_sys_id)
+          WHEN {% parameter sys_filter %} = 'Y' THEN EGENE54_SEAH.getlevel4_sysname(${TABLE}.srm_sys_id)
+        END;;
+  }
+
+  dimension: srm_acp_cat_cd {
+    label: "요청분류(접수)"
+    type: string
+    sql: EGENE54_SEAH.get_codename(${TABLE}.srm_acp_cat_cd) ;;
+  }
+
+  dimension: srm_src_id {
+    label: "연관ID"
+    type: string
+    hidden: yes
+    sql: ${TABLE}.srm_src_id ;;
+  }
+
+  dimension: srm_sys_cd {
+    label: "업무분류"
+    type: string
+    sql: EGENE54_SEAH.get_codename(${TABLE}.srm_sys_cd) ;;
+  }
+
+  dimension: srm_typ_cd{
+    label: "SR요청구분"
+    type: string
+    sql: EGENE54_SEAH.get_codename(${TABLE}.srm_typ_cd) ;;
+  }
+
+  dimension: srm_proxy_yn{
+    label: "대행여부"
+    type: yesno
+    sql: ${TABLE}.srm_proxy_yn IS NOT NULL ;;
   }
 
   measure: srm_count {

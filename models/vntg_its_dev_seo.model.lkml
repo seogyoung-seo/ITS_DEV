@@ -22,6 +22,11 @@ explore: eso_srm {
       field: emp_filter
       value: "접수자"
     }
+
+    filters: {
+      field: sys_filter
+      value: "N"
+    }
   }
   join: employee {
     relationship: one_to_one
