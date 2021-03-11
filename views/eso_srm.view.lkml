@@ -22,7 +22,7 @@ view: eso_srm {
   parameter: emp_filter {
     # group_label: "Filter"
     view_label: "Filter"
-    label: "담당자구분"
+    label: "(서비스요청)담당자구분"
     allowed_value: { value: "접수자" }
     allowed_value: { value: "처리자" }
   }
@@ -32,7 +32,7 @@ view: eso_srm {
     type: string
     sql: CASE
           WHEN {% parameter emp_filter %} = '접수자' THEN EGENE54_SEAH.get_empname(${TABLE}.srm_acp_emp_id)
-          WHEN {% parameter emp_filter %} = '처리자' THEN EGENE54_SEAH.get_empname(${TABLE}.srm_act_emp_id)
+          WHEN {% parameter emp_filter %} = '처리자' THEN EGENE54_SEAH.get_empname(${TABLE}.srm_ass_emp_id)
         END ;;
   }
 
@@ -48,6 +48,13 @@ view: eso_srm {
     type: time
     timeframes: [time, hour, date, week, month, year, hour_of_day, day_of_week, month_num, raw, week_of_year]
     sql: TO_DATE(${TABLE}.srm_actfinish_dttm, 'YYYY-MM-DD HH24:MI:SS') ;;
+  }
+
+  dimension_group: srm_agree_dttm {
+    label: "합의일시"
+    type: time
+    timeframes: [time, hour, date, week, month, year, hour_of_day, day_of_week, month_num, raw, week_of_year]
+    sql: TO_DATE(${TABLE}.srm_agree_dttm, 'YYYY-MM-DD HH24:MI:SS') ;;
   }
 
   dimension_group: srm_act_dttm {
@@ -187,10 +194,30 @@ view: eso_srm {
 
   measure: srm_count {
     # description: "Use this for counting lifetime orders across many users"
+    label: "건 수"
+    type: count
+    drill_fields: [detail*]
+  }
+
+  measure: untreated_count {
+    # description: "Use this for counting lifetime orders across many users"
     label: "미처리건 수"
     type: sum
     sql: CASE WHEN ${TABLE}.srm_clo_dttm is NULL THEN 1
               ELSE 0
           END ;;
+  }
+
+  measure: over_date{
+    # description: "Use this for counting lifetime orders across many users"
+    label: "기한초과건 수"
+    type: sum
+    sql: CASE WHEN TO_DATE(SUBSTR(${TABLE}.srm_actfinish_dttm, 1, 8), 'YYYY-MM-DD') - TO_DATE(SUBSTR(${TABLE}.srm_agree_dttm, 1, 8), 'YYYY-MM-DD') > 0 THEN 1
+              ELSE 0
+          END;;
+  }
+
+  set: detail {
+    fields: [srm_id, emp_id, srm_ass_dpt_id, srm_ass_org_id, srm_ass_wog_id, srm_cat_cd, srm_cla_cd, srm_clo_cd, srm_med_cd, srm_own_org_id, srm_req_emp_id, srm_req_org_id, srm_sys_id, srm_acp_cat_cd, srm_src_id, srm_sys_cd, srm_typ_cd, srm_proxy_yn]
   }
 }

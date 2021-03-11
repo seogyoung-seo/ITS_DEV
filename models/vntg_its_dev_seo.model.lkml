@@ -33,4 +33,9 @@ explore: eso_srm {
     sql_on: ${employee.emp_id} = ${eso_srm.emp_id} ;;
   }
 
+  join: eso_chm {
+    relationship: one_to_many
+    sql_on: ${eso_srm.srm_id} = ${eso_chm.chm_src_id} ;;
+  }
+
 }
