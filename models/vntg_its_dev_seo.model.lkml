@@ -25,7 +25,7 @@ explore: eso_srm {
 
     filters: {
       field: sys_filter
-      value: "N"
+      value: "Level 1"
     }
   }
   join: employee {
@@ -35,7 +35,22 @@ explore: eso_srm {
 
   join: eso_chm {
     relationship: one_to_many
-    sql_on: ${eso_srm.srm_id} = ${eso_chm.chm_src_id} ;;
+    sql_on: ${eso_chm.chm_src_id} = ${eso_srm.srm_id} ;;
+    fields: [eso_chm.srm_rel_detail*]
+  }
+}
+
+explore: eso_chm {
+  label: "변경관리"
+
+  join: employee {
+    relationship: one_to_one
+    sql_on: ${employee.emp_id} = ${eso_chm.emp_id} ;;
   }
 
+  join: eso_srm {
+    relationship: one_to_many
+    sql_on: ${eso_srm.srm_id} = ${eso_chm.chm_src_id} ;;
+    fields: [eso_srm.chm_rel_detail*]
+  }
 }

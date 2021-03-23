@@ -148,16 +148,18 @@ view: eso_srm {
     # group_label: "Filter"
     view_label: "Filter"
     label: "업무시스템상세조회"
-    allowed_value: { value: "Y" }
-    allowed_value: { value: "N" }
+    allowed_value: { value: "Level 1" }
+    allowed_value: { value: "Level 2" }
+    allowed_value: { value: "Level 3" }
   }
 
   dimension: srm_sys_id {
     label: "업무시스템"
     type: string
     sql: CASE
-          WHEN {% parameter sys_filter %} = 'N' THEN EGENE54_SEAH.getlevel2_sysname(${TABLE}.srm_sys_id)
-          WHEN {% parameter sys_filter %} = 'Y' THEN EGENE54_SEAH.getlevel4_sysname(${TABLE}.srm_sys_id)
+          WHEN {% parameter sys_filter %} = 'Level 1' THEN EGENE54_SEAH.getlevel1_sysname(${TABLE}.srm_sys_id)
+          WHEN {% parameter sys_filter %} = 'Level 2' THEN EGENE54_SEAH.getlevel2_sysname(${TABLE}.srm_sys_id)
+          WHEN {% parameter sys_filter %} = 'Level 3' THEN EGENE54_SEAH.getlevel4_sysname(${TABLE}.srm_sys_id)
         END;;
   }
 
@@ -217,7 +219,44 @@ view: eso_srm {
           END;;
   }
 
+  #Measure Filter
+  dimension: retrieve_in30D {
+    label: "최근 30일 조회"
+    type: number
+    hidden: yes
+    sql: TRUNC(SYSDATE - TO_DATE(SUBSTR(NVL(${TABLE}.srm_clo_dttm, SYSDATE), 1, 8), 'YYYY-MM-DD'));;
+  }
+
+  parameter: date_select {
+    view_label: "Filter"
+    label: "조회기간선택"
+    allowed_value: { value: "30" }
+    allowed_value: { value: "90" }
+    allowed_value: { value: "180" }
+  }
+
+  dimension: retrieve_within30D {
+    label: "최근 30일 조회"
+    type: yesno
+    hidden: yes
+    sql: ${retrieve_in30D} <= {% parameter date_select %};;
+  }
+
+  measure: count_in30D {
+    label: "최근 30일 미처리건 수"
+    type: count
+
+    filters: {
+      field: retrieve_within30D
+      value: "Yes"
+    }
+  }
+
   set: detail {
     fields: [srm_id, emp_id, srm_ass_dpt_id, srm_ass_org_id, srm_ass_wog_id, srm_cat_cd, srm_cla_cd, srm_clo_cd, srm_med_cd, srm_own_org_id, srm_req_emp_id, srm_req_org_id, srm_sys_id, srm_acp_cat_cd, srm_src_id, srm_sys_cd, srm_typ_cd, srm_proxy_yn]
+  }
+
+  set: chm_rel_detail {
+    fields: [srm_id, srm_cla_cd, srm_clo_cd, srm_req_org_id, srm_proxy_yn, srm_count, untreated_count, over_date]
   }
 }

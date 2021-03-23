@@ -25,11 +25,28 @@ view: eso_chm {
     sql: TO_DATE(${TABLE}.srm_acp_dttm, 'YYYY-MM-DD HH24:MI:SS') ;;
   }
 
-  dimension: chm_acp_emp_id {
-    label: "접수자"
-    type: string
-    sql: EGENE54_SEAH.get_empname(${TABLE}.chm_acp_emp_id) ;;
+  parameter: emp_filter {
+    # group_label: "Filter"
+    view_label: "Filter"
+    label: "(서비스요청)담당자구분"
+    allowed_value: { value: "접수자" }
+    allowed_value: { value: "처리자" }
   }
+
+  dimension: emp_id {
+    label: "담당자"
+    type: string
+    sql: CASE
+          WHEN {% parameter emp_filter %} = '접수자' THEN EGENE54_SEAH.get_empname(${TABLE}.chm_acp_emp_id)
+          WHEN {% parameter emp_filter %} = '처리자' THEN EGENE54_SEAH.get_empname(${TABLE}.chm_ass_emp_id)
+        END ;;
+  }
+
+  # dimension: chm_acp_emp_id {
+  #   label: "접수자"
+  #   type: string
+  #   sql: EGENE54_SEAH.get_empname(${TABLE}.chm_acp_emp_id) ;;
+  # }
 
   dimension: chm_actfinish_dttm {
     label: "실제완료일시"
@@ -37,29 +54,32 @@ view: eso_chm {
     sql: TO_DATE(${TABLE}.chm_actfinish_dttm, 'YYYY-MM-DD HH24:MI:SS') ;;
   }
 
-  dimension: chm_actstart_dttm {
+  dimension_group: chm_actstart_dttm {
     label: "실제시작일시"
-    type: string
+    type: time
+    timeframes: [time, hour, date, week, month, year, hour_of_day, day_of_week, month_num, raw, week_of_year]
     sql: TO_DATE(${TABLE}.chm_actstart_dttm, 'YYYY-MM-DD HH24:MI:SS') ;;
   }
 
-  dimension: chm_act_dttm {
+  dimension_group: chm_act_dttm {
     label: "처리일시"
-    type: string
+    type: time
+    timeframes: [time, hour, date, week, month, year, hour_of_day, day_of_week, month_num, raw, week_of_year]
     sql: TO_DATE(${TABLE}.chm_act_dttm, 'YYYY-MM-DD HH24:MI:SS') ;;
   }
 
-  dimension: chm_agree_dttm {
+  dimension_group: chm_agree_dttm {
     label: "합의일시"
-    type: string
+    type: time
+    timeframes: [time, hour, date, week, month, year, hour_of_day, day_of_week, month_num, raw, week_of_year]
     sql: TO_DATE(${TABLE}.chm_agree_dttm, 'YYYY-MM-DD HH24:MI:SS') ;;
   }
 
-  dimension: chm_ass_emp_id {
-    label: "처리자"
-    type: string
-    sql: EGENE54_SEAH.get_empname(${TABLE}.chm_ass_emp_id) ;;
-  }
+  # dimension: chm_ass_emp_id {
+  #   label: "처리자"
+  #   type: string
+  #   sql: EGENE54_SEAH.get_empname(${TABLE}.chm_ass_emp_id) ;;
+  # }
 
   dimension: chm_ass_org_id {
     label: "처리자기관"
@@ -97,15 +117,17 @@ view: eso_chm {
     sql: EGENE54_SEAH.get_codename(${TABLE}.chm_clo_cd) ;;
   }
 
-  dimension: chm_clo_dttm {
+  dimension_group: chm_clo_dttm {
     label: "종료일시"
-    type: string
+    type: time
+    timeframes: [time, hour, date, week, month, year, hour_of_day, day_of_week, month_num, raw, week_of_year]
     sql: TO_DATE(${TABLE}.chm_clo_dttm, 'YYYY-MM-DD HH24:MI:SS') ;;
   }
 
-  dimension: chm_dead_dttm {
+  dimension_group: chm_dead_dttm {
     label: "희망완료일시"
-    type: string
+    type: time
+    timeframes: [time, hour, date, week, month, year, hour_of_day, day_of_week, month_num, raw, week_of_year]
     sql: TO_DATE(${TABLE}.chm_dead_dttm, 'YYYY-MM-DD HH24:MI:SS') ;;
   }
 
@@ -115,9 +137,10 @@ view: eso_chm {
     sql: EGENE54_SEAH.get_codename(${TABLE}.chm_med_cd) ;;
   }
 
-  dimension: chm_reg_dttm {
+  dimension_group: chm_reg_dttm {
     label: "등록일시"
-    type: string
+    type: time
+    timeframes: [time, hour, date, week, month, year, hour_of_day, day_of_week, month_num, raw, week_of_year]
     sql: TO_DATE(${TABLE}.chm_reg_dttm, 'YYYY-MM-DD HH24:MI:SS') ;;
   }
 
@@ -133,9 +156,10 @@ view: eso_chm {
     sql: EGENE54_SEAH.get_orgname(${TABLE}.chm_reg_org_id) ;;
   }
 
-  dimension: chm_req_dttm {
+  dimension_group: chm_req_dttm {
     label: "요청일시"
-    type: string
+    type: time
+    timeframes: [time, hour, date, week, month, year, hour_of_day, day_of_week, month_num, raw, week_of_year]
     sql: TO_DATE(${TABLE}.chm_req_dttm, 'YYYY-MM-DD HH24:MI:SS') ;;
   }
 
@@ -215,5 +239,15 @@ view: eso_chm {
     label: "작업그룹또는담당자"
     type: string
     sql: ${TABLE}.chm_ass_we_id ;;
+  }
+  measure: chm_count {
+    # description: "Use this for counting lifetime orders across many users"
+    label: "건 수"
+    type: count
+    drill_fields: [srm_rel_detail*]
+  }
+
+  set: srm_rel_detail {
+    fields: [chm_id, chm_actfinish_dttm, chm_ass_org_id, chm_ass_wog_id, chm_cat_cd, chm_cit_id, chm_cla_cd, chm_clo_cd, chm_req_org_id, chm_act_mh]
   }
 }
