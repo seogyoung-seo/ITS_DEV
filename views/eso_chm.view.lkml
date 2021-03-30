@@ -247,7 +247,13 @@ view: eso_chm {
     drill_fields: [srm_rel_detail*]
   }
 
+  measure: chm_act_mh_sum {
+    label: "공수합"
+    type: sum
+    sql: ${TABLE}.chm_act_mh ;;
+  }
+
   set: srm_rel_detail {
-    fields: [chm_id, chm_actfinish_dttm, chm_ass_org_id, chm_ass_wog_id, chm_cat_cd, chm_cit_id, chm_cla_cd, chm_clo_cd, chm_req_org_id, chm_act_mh]
+    fields: [chm_id, chm_actfinish_dttm, chm_ass_org_id, chm_ass_wog_id, chm_cat_cd, chm_cit_id, chm_cla_cd, chm_clo_cd, chm_req_org_id, chm_act_mh, chm_act_mh_sum]
   }
 }

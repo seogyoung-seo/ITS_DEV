@@ -220,8 +220,8 @@ view: eso_srm {
   }
 
   #Measure Filter
-  dimension: retrieve_in30D {
-    label: "최근 30일 조회"
+  dimension: retrieve_selDate {
+    label: "최근 일자별 조회"
     type: number
     hidden: yes
     sql: TRUNC(SYSDATE - TO_DATE(SUBSTR(NVL(${TABLE}.srm_clo_dttm, SYSDATE), 1, 8), 'YYYY-MM-DD'));;
@@ -235,19 +235,19 @@ view: eso_srm {
     allowed_value: { value: "180" }
   }
 
-  dimension: retrieve_within30D {
-    label: "최근 30일 조회"
+  dimension: retrieve_withselDate {
+    label: "최근 일자별 조회"
     type: yesno
     hidden: yes
-    sql: ${retrieve_in30D} <= {% parameter date_select %};;
+    sql: ${retrieve_selDate} <= {% parameter date_select %};;
   }
 
-  measure: count_in30D {
-    label: "최근 30일 미처리건 수"
+  measure: count_selDate {
+    label: "최근 일자별 미처리건 수"
     type: count
 
     filters: {
-      field: retrieve_within30D
+      field: retrieve_withselDate
       value: "Yes"
     }
   }
