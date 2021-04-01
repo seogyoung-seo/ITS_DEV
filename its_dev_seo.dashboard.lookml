@@ -659,7 +659,7 @@
     height: 6
   filters:
   - name: "(서비스요청)담당자구분"
-    title: "(서비스요청)담당자구분"
+    title: "담당자구분"
     type: field_filter
     default_value: 접수자
     allow_multiple_values: true

@@ -6,6 +6,7 @@ label: "2)ITS Dev List[Seo]"
 # 형식처럼 Table Name앞에 [EGENE54_SEAH.]을 붙여야합니다.
 
 include: "/views/*.view"
+include: "/*.dashboard.lookml"
 
 datagroup: vntg_its_dev_default_datagroup {
   # sql_trigger: SELECT MAX(id) FROM etl_log;;
