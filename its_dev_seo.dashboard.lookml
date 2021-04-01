@@ -2,8 +2,25 @@
   title: its_dev_seo
   layout: newspaper
   preferred_viewer: dashboards-next
+
+  filters:
+  - name: "(서비스요청)담당자구분"
+    title: "(서비스요청)담당자구분"
+    type: field_filter
+    default_value: 접수자
+    allow_multiple_values: true
+    required: false
+    ui_config:
+      type: dropdown_menu
+      display: inline
+      options: []
+    model: vntg_its_dev_seo
+    explore: eso_srm
+    listens_to_filters: []
+    field: eso_srm.emp_filter
+
   elements:
-  - title: 회사별 요청 건수(Top 10), eso_srm.emp_filter
+  - title: 회사별 요청 건수(Top 10)
     name: 회사별 요청 건수(Top 10)
     model: vntg_its_dev_seo
     explore: eso_srm
@@ -657,18 +674,3 @@
     col: 12
     width: 12
     height: 6
-  filters:
-  - name: "(서비스요청)담당자구분"
-    title: "담당자구분"
-    type: field_filter
-    default_value: 접수자
-    allow_multiple_values: true
-    required: false
-    ui_config:
-      type: dropdown_menu
-      display: inline
-      options: []
-    model: vntg_its_dev_seo
-    explore: eso_srm
-    listens_to_filters: []
-    field: eso_srm.emp_filter
