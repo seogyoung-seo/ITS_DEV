@@ -88,11 +88,11 @@ view: eso_srm {
     sql: EGENE54_SEAH.get_wogname(${TABLE}.srm_ass_wog_id) ;;
   }
 
-  dimension: srm_cat_cd {
-    label: "범주"
-    type: string
-    sql: EGENE54_SEAH.getcode_level3name(${TABLE}.srm_cat_cd) ;;
-  }
+  # dimension: srm_cat_cd {
+  #   label: "범주"
+  #   type: string
+  #   sql: EGENE54_SEAH.getcode_level3name(${TABLE}.srm_cat_cd) ;;
+  # }
 
   dimension: srm_cla_cd {
     label: "상세유형"
@@ -147,10 +147,20 @@ view: eso_srm {
   parameter: sys_filter {
     # group_label: "Filter"
     view_label: "Filter"
-    label: "업무시스템상세조회"
+    label: "업무시스템/범주 조회Level"
     allowed_value: { value: "Level 1" }
     allowed_value: { value: "Level 2" }
     allowed_value: { value: "Level 3" }
+  }
+
+  dimension: srm_cat_cd {
+    label: "범주"
+    type: string
+    sql: CASE
+          WHEN {% parameter sys_filter %} = 'Level 1' THEN EGENE54_SEAH.getcode_level1name(${TABLE}.srm_cat_cd)
+          WHEN {% parameter sys_filter %} = 'Level 2' THEN EGENE54_SEAH.getcode_level2name(${TABLE}.srm_cat_cd)
+          WHEN {% parameter sys_filter %} = 'Level 3' THEN EGENE54_SEAH.getcode_level3name(${TABLE}.srm_cat_cd)
+        END ;;
   }
 
   dimension: srm_sys_id {
