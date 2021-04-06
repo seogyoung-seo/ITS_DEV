@@ -156,21 +156,21 @@ view: eso_srm {
   dimension: srm_cat_cd {
     label: "범주"
     type: string
-    sql: CASE
-          WHEN {% parameter sys_filter %} = 'Level 1' THEN EGENE54_SEAH.getcode_level1name(${TABLE}.srm_cat_cd)
-          WHEN {% parameter sys_filter %} = 'Level 2' THEN EGENE54_SEAH.getcode_level2name(${TABLE}.srm_cat_cd)
-          WHEN {% parameter sys_filter %} = 'Level 3' THEN EGENE54_SEAH.getcode_level3name(${TABLE}.srm_cat_cd)
-        END ;;
+    sql: NVL(CASE WHEN {% parameter sys_filter %} = 'Level 1' THEN EGENE54_SEAH.getcode_level1name(${TABLE}.srm_cat_cd)
+                  WHEN {% parameter sys_filter %} = 'Level 2' THEN EGENE54_SEAH.getcode_level2name(${TABLE}.srm_cat_cd)
+                  WHEN {% parameter sys_filter %} = 'Level 3' THEN EGENE54_SEAH.getcode_level3name(${TABLE}.srm_cat_cd)
+              END, '기타'
+            ) ;;
   }
 
   dimension: srm_sys_id {
     label: "업무시스템"
     type: string
-    sql: CASE
-          WHEN {% parameter sys_filter %} = 'Level 1' THEN EGENE54_SEAH.getlevel1_sysname(${TABLE}.srm_sys_id)
-          WHEN {% parameter sys_filter %} = 'Level 2' THEN EGENE54_SEAH.getlevel2_sysname(${TABLE}.srm_sys_id)
-          WHEN {% parameter sys_filter %} = 'Level 3' THEN EGENE54_SEAH.getlevel4_sysname(${TABLE}.srm_sys_id)
-        END;;
+    sql: NVL(CASE WHEN {% parameter sys_filter %} = 'Level 1' THEN EGENE54_SEAH.getlevel1_sysname(${TABLE}.srm_sys_id)
+                  WHEN {% parameter sys_filter %} = 'Level 2' THEN EGENE54_SEAH.getlevel2_sysname(${TABLE}.srm_sys_id)
+                  WHEN {% parameter sys_filter %} = 'Level 3' THEN EGENE54_SEAH.getlevel4_sysname(${TABLE}.srm_sys_id)
+              END, '기타'
+            ) ;;
   }
 
   dimension: srm_acp_cat_cd {
