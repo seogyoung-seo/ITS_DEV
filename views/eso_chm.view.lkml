@@ -251,6 +251,7 @@ view: eso_chm {
     label: "공수합"
     type: sum
     sql: ${TABLE}.chm_act_mh ;;
+    drill_fields: [srm_rel_detail*]
   }
 
   set: srm_rel_detail {

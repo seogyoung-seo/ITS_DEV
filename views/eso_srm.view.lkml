@@ -208,6 +208,7 @@ view: eso_srm {
     sql: CASE WHEN ${TABLE}.srm_clo_dttm is NULL THEN 1
               ELSE 0
           END ;;
+    drill_fields: [detail*]
   }
 
   measure: over_date{
@@ -217,6 +218,7 @@ view: eso_srm {
     sql: CASE WHEN TO_DATE(SUBSTR(${TABLE}.srm_actfinish_dttm, 1, 8), 'YYYY-MM-DD') - TO_DATE(SUBSTR(${TABLE}.srm_agree_dttm, 1, 8), 'YYYY-MM-DD') > 0 THEN 1
               ELSE 0
           END;;
+    drill_fields: [detail*]
   }
 
   #Measure Filter
@@ -250,6 +252,7 @@ view: eso_srm {
       field: retrieve_withselDate
       value: "Yes"
     }
+    drill_fields: [detail*]
   }
 
   set: detail {
