@@ -262,7 +262,7 @@ view: eso_srm {
       field: retrieve_withselDate
       value: "Yes"
     }
-    drill_fields: [detail*, chm_rel_detail*]
+    drill_fields: [chm_rel_detail*]
   }
 
   set: detail {
