@@ -5,6 +5,7 @@ label: "2)ITS Dev List[Seo]"
 # EGENE54_SEAH.[Table Name]
 # 형식처럼 Table Name앞에 [EGENE54_SEAH.]을 붙여야합니다.
 
+
 include: "/views/*.view"
 include: "/*.dashboard.lookml"
 
