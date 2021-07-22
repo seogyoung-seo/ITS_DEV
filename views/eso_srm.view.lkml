@@ -171,6 +171,13 @@ view: eso_srm {
                   WHEN {% parameter sys_filter %} = 'Level 3' THEN EGENE54_SEAH.getlevel4_sysname(${TABLE}.srm_sys_id)
               END, '기타'
             ) ;;
+    link: {
+      label: "회사별 상세 구분"
+      url: "https://vintagelab.au.looker.com/looks/2604?&f[eso_srm.srm_sys_id]={{value|url_encode}}"
+      #https://vintagelab.au.looker.com/looks/2604?&f[eso_srm.srm_sys_id]={{ %value% | url_encode }}
+      #https://vintagelab.au.looker.com/looks/2604?qid=3h07BSBu0yD2e8jFf9fHbo&toggle=fil
+      #https://vintagelab.au.looker.com/looks/2604?qid=rH9ndpVcFUf9BXwWjSI2yU
+    }
   }
 
   dimension: srm_acp_cat_cd {
