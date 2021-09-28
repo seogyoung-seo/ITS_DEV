@@ -4,7 +4,7 @@ label: "2)ITS Dev List[Seo]"
 # SQL Table 사용 시
 # EGENE54_SEAH.[Table Name]
 # 형식처럼 Table Name앞에 [EGENE54_SEAH.]을 붙여야합니다.
-
+#1111111
 
 include: "/views/*.view"
 include: "/*.dashboard.lookml"
