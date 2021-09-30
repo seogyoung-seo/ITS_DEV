@@ -8,7 +8,7 @@ label: "2)ITS Dev List[Seo]"
 
 include: "/views/*.view"
 include: "/*.dashboard.lookml"
-#56256325
+
 datagroup: vntg_its_dev_default_datagroup {
   # sql_trigger: SELECT MAX(id) FROM etl_log;;
   max_cache_age: "1 hour"
